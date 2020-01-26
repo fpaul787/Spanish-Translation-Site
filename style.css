@@ -1,0 +1,19 @@
+.button {
+	background: #333; /*Color of inside button unhover*/
+	color: white; /* Color of button text */
+	border: 2px solid #4caf50; /* Green */
+	padding: 15px 32px; /* Spacing inside button*/
+	margin: 4px 2px; /*Spacing outside button */
+	text-align: center; /* Text is centered in button */
+	text-decoration: none; /*No decoration to text */
+	display: inline-block; /* Display element inline-level */
+	font-size: 16px;
+	cursor: pointer;
+	border-radius: 8px;
+}
+
+.button:hover {
+	background-color: lightgreen; /* Green */
+	color: white;
+	width: 200px;
+}

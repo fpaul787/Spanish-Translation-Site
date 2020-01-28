@@ -8,12 +8,13 @@ import {shuffle, reverseMapping} from './utility.js'
 
 // Variable
 var time = 5
+var score = 0
 
 // Get elements and add event listeners
 const currentWord = document.querySelector('#current-word')
 const buttons = document.querySelector('#buttons').children
 const timeDisplay = document.querySelector('#time')
-const seconds = document.querySelector('#seconds')
+const message = document.querySelector('#message')
 const scoreDisplay = document.querySelector('#score')
 
 
@@ -30,12 +31,17 @@ function init(){
     // Load word from array
     showWords(kitchenBankReverse)
 
-    startMatch()
+    
 
     // Match word when user clicks button
+    // document.getElementById("buttons").addEventListener("click", function (event) {
+    //     matchWords(event)
+    // })
     document.getElementById("buttons").addEventListener("click", function (event) {
-        matchWords(event)
+        startMatch(event)
     })
+
+    
 
     // Call countdown on every second
     setInterval(countDown, 1000)
@@ -86,21 +92,36 @@ function showWords(dict) {
 
 // Start match
 function startMatch(){
-    time = 5    
+       
     
+    if(matchWords()){
+        console.log("This was correct, keep playing")
+        showWords(kitchenBankReverse)
+        time = 5
+        score++
+    }
+    scoreDisplay.innerHTML = score
+
 }
 
 
 function matchWords() {
 
-    //   console.log(event.target.innerHTML)
+    
     var value = event.target.innerHTML
-    if (kitchenBank[value] === currentWord.innerHTML) {
-        alert('Correct!😁')
+    if(value == null){
+        message.innerHTML = 'Please choose a translation'
+        
+    }else if (kitchenBank[value] === currentWord.innerHTML) {
+        
+        message.innerHTML = 'Correct!😁'
+        return true
     } else {
-        alert('Not Correct!😑')
-
+        
+        message.innerHTML = 'Not Correct!😑'
+        return false
     }
+    
 }
 
 

@@ -144,7 +144,7 @@ function startMatch() {
 
 }
 
-
+var wrongAnswerClicked = false
 function matchWords() {
 
 
@@ -159,15 +159,19 @@ function matchWords() {
         // Inefficient, but cant figure out way
         // to change red button back to green
         // Change buttons to show options
-        buttonsElement.map((button, index) => {
-            return button.className = 'button'
-        })
+        if(wrongAnswerClicked){
+            buttonsElement.map((button, index) => {
+                return button.className = 'button'
+            })
+        }
+        
         return true
     } else {
 
         message.innerHTML = 'Not Correct😑'
         console.log(event.target.className)
         event.target.className = "buttonWrongChoice"
+        wrongAnswerClicked = true
         return false
     }
 

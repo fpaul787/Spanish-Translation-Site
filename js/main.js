@@ -3,12 +3,30 @@
 // to the target.
 window.addEventListener('load', init)
 
-import {kitchenBank} from './translations.js'
-import {shuffle, reverseMapping} from './utility.js'
+import { kitchenBank } from './translations.js'
+import { shuffle, reverseMapping } from './utility.js'
 
-// Variable
-var time = 5
-var score = 0
+
+// Globals
+
+// difficulty levels of time
+const levels = {
+    easy: 15,
+    medium: 10,
+    hard: 5
+}
+
+
+let currentLevel = levels.easy // current difficult level
+let time = currentLevel // time in current game
+let maxCorrectInRow = 5
+const lowestTime = 5
+let isPlaying
+let prevQuestion = ''
+
+// Variables
+let score = 0   //score in game
+let correctInRow = 0 // amount corrent in row
 
 // Get elements and add event listeners
 const currentWord = document.querySelector('#current-word')
@@ -26,27 +44,23 @@ var buttonsElement = Array.prototype.slice.call(buttons)
 var kitchenBankReverse = reverseMapping(kitchenBank)
 
 
-function init(){
+function init() {
 
     // Load word from array
     showWords(kitchenBankReverse)
 
-    
-
-    // Match word when user clicks button
-    // document.getElementById("buttons").addEventListener("click", function (event) {
-    //     matchWords(event)
-    // })
+    // listen to button click event
     document.getElementById("buttons").addEventListener("click", function (event) {
         startMatch(event)
     })
 
-    
 
     // Call countdown on every second
     setInterval(countDown, 1000)
 
 
+    // Check game status
+    setInterval(checkStatus, 50)
 }
 
 function showWords(dict) {
@@ -61,7 +75,19 @@ function showWords(dict) {
 
     // Generate random index
     var randIndex = Math.floor(Math.random() * keys.length)
-    var keyValue = keys[randIndex]
+
+
+    // Check if question was asked last time, bascially,
+    // I want to make sure same question is not being
+    // asked twice
+    // === is strict comparison
+    while (prevQuestion === keys[randIndex]) {
+        randIndex = Math.floor(Math.random() * keys.length)
+    }
+    prevQuestion = keys[randIndex]
+    var questionAsked = keys[randIndex]
+
+
 
     var answerIndex = randIndex // answer to our question
 
@@ -82,7 +108,7 @@ function showWords(dict) {
 
 
     // Output random Spanish word
-    currentWord.innerHTML = keyValue
+    currentWord.innerHTML = questionAsked
 
     // Change buttons to show options
     buttonsElement.map((button, index) => {
@@ -91,14 +117,28 @@ function showWords(dict) {
 }
 
 // Start match
-function startMatch(){
-       
-    
-    if(matchWords()){
-        console.log("This was correct, keep playing")
+function startMatch() {
+
+    if (matchWords()) {
+        isPlaying = true
         showWords(kitchenBankReverse)
-        time = 5
-        score++
+        time = currentLevel + 1
+
+
+        score++ // increment score
+        correctInRow++ // increment correct in row
+
+        if (correctInRow == maxCorrectInRow && currentLevel != lowestTime) {
+
+            currentLevel = currentLevel - 5 // change level
+            time = currentLevel + 1 // change time
+            correctInRow = 0 // reset correct in row
+            maxCorrectInRow = maxCorrectInRow + 5 // create new max 
+
+        }
+    } else {
+        score = 0
+        correctInRow = 0 // reset correct in row
     }
     scoreDisplay.innerHTML = score
 
@@ -107,21 +147,30 @@ function startMatch(){
 
 function matchWords() {
 
-    
+
     var value = event.target.innerHTML
-    if(value == null){
+    if (value == null) {
         message.innerHTML = 'Please choose a translation'
-        
-    }else if (kitchenBank[value] === currentWord.innerHTML) {
-        
-        message.innerHTML = 'Correct!😁'
+
+    } else if (kitchenBank[value] === currentWord.innerHTML) {
+
+        message.innerHTML = 'Correct😁'
+
+        // Inefficient, but cant figure out way
+        // to change red button back to green
+        // Change buttons to show options
+        buttonsElement.map((button, index) => {
+            return button.className = 'button'
+        })
         return true
     } else {
-        
-        message.innerHTML = 'Not Correct!😑'
+
+        message.innerHTML = 'Not Correct😑'
+        console.log(event.target.className)
+        event.target.className = "buttonWrongChoice"
         return false
     }
-    
+
 }
 
 
@@ -129,15 +178,24 @@ function matchWords() {
 function countDown() {
 
     // Make sure time is not run out
-    if(time > 0){
+    if (time > 0) {
         // Decrement 
-        time--;
-    }else if(time === 0){
+        time--
+    } else if (time === 0) {
         // Game is over
+        isPlaying = false
         time = 0
     }
     // Show time
     timeDisplay.innerHTML = time
+}
+
+// Check game status
+function checkStatus() {
+    if (!isPlaying && time === 0) {
+        message.innerHTML = 'Game Over!'
+        score = -1
+    }
 }
 
 

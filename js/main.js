@@ -3,7 +3,7 @@
 // to the target.
 window.addEventListener('load', init)
 
-import { kitchenBank } from './translations.js'
+import * as constants from './translations.js'
 import { shuffle, reverseMapping } from './utility.js'
 
 
@@ -41,7 +41,7 @@ var buttonsElement = Array.prototype.slice.call(buttons)
 
 // reverse bank so that spanish words are keys, and english
 // words are values
-var kitchenBankReverse = reverseMapping(kitchenBank)
+var kitchenBankReverse = reverseMapping(constants.kitchenBank)
 
 
 function init() {
@@ -152,7 +152,7 @@ function matchWords() {
     if (value == null) {
         message.innerHTML = 'Please choose a translation'
 
-    } else if (kitchenBank[value] === currentWord.innerHTML) {
+    } else if (constants.kitchenBank[value] === currentWord.innerHTML) {
 
         message.innerHTML = 'Correct😁'
 

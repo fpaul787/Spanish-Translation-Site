@@ -10,12 +10,13 @@
 	font-size: 16px;
 	cursor: pointer;
 	border-radius: 8px;
+
+	width: 50%;
 }
 
 .button:hover {
 	background-color: lightgreen; /* Green */
 	color: white;
-	width: 150px;
 }
 
 .buttonWrongChoice {

@@ -36,8 +36,10 @@ const message = document.querySelector('#message')
 const scoreDisplay = document.querySelector('#score')
 
 
+
 // convert buttons to an array
 var buttonsElement = Array.prototype.slice.call(buttons)
+var wrongButton
 
 // reverse bank so that spanish words are keys, and english
 // words are values
@@ -51,9 +53,12 @@ function init() {
 
     // listen to button click event
     document.getElementById("buttons").addEventListener("click", function (event) {
-        startMatch(event)
+        
+        if(event.target.id != 'buttons'){
+            startMatch(event)
+        }
+        
     })
-
 
     // Call countdown on every second
     setInterval(countDown, 1000)
@@ -145,8 +150,8 @@ function startMatch() {
 }
 
 var wrongAnswerClicked = false
-function matchWords() {
 
+function matchWords() {
 
     var value = event.target.innerHTML
     if (value == null) {
@@ -156,23 +161,17 @@ function matchWords() {
 
         message.innerHTML = 'Correct😁'
 
-        // Inefficient, but cant figure out way
-        // to change red button back to green
-        // Change buttons to show options
         if(wrongAnswerClicked){
-            buttonsElement.map((button, index) => {
-                return button.className = 'button'
-            })
+            wrongButton.className = 'button'
         }
         
         return true
     } else {
-
         message.innerHTML = 'Not Correct😑'
-        console.log(event.target.className)
-        event.target.className = "buttonWrongChoice"
-        wrongAnswerClicked = true
-        return false
+        wrongButton = event.target
+        event.target.className = "buttonWrongChoice"        
+        wrongAnswerClicked = true    
+        return false    
     }
 
 }

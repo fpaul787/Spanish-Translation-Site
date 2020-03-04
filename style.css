@@ -22,7 +22,6 @@
 .buttonWrongChoice {
 	background: red; /*Color of inside button unhover*/
 	color: white; /* Color of button text */
-
 	padding: 15px 32px; /* Spacing inside button*/
 	margin: 4px 2px; /*Spacing outside button */
 	text-align: center; /* Text is centered in button */

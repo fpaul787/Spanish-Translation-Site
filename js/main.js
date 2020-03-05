@@ -16,46 +16,44 @@ const levels = {
     hard: 5
 }
 
-
-let currentLevel = levels.easy // current difficult level
-let time = currentLevel // time in current game
-let maxCorrectInRow = 5
-const lowestTime = 5
-let isPlaying
-let prevQuestion = ''
-
-// Variables
-let score = 0   //score in game
-let correctInRow = 0 // amount corrent in row
-
 // Get elements and add event listeners
 const currentWord = document.querySelector('#current-word')
 const buttons = document.querySelector('#buttons').children
 const timeDisplay = document.querySelector('#time')
 const message = document.querySelector('#message')
 const scoreDisplay = document.querySelector('#score')
+const lowestTime = 5
 
+// Variables
+let currentLevel = levels.easy // current difficult level
+let time = currentLevel // time in current game
+let maxCorrectInRow = 5
 
+let isPlaying
+let prevQuestion = ''
+let score = 0   //score in game
+let correctInRow = 0 // amount corrent in row
 
 // convert buttons to an array
-var buttonsElement = Array.prototype.slice.call(buttons)
-var wrongButton
+let buttonsElement = Array.prototype.slice.call(buttons)
+let wrongButton
 
 // reverse bank so that spanish words are keys, and english
 // words are values
-var kitchenBankReverse = reverseMapping(constants.kitchenBank)
+let kitchenBankReverse = reverseMapping(constants.kitchenBank)
 
 
 function init() {
 
+    
     // Load word from array
-    showWords(kitchenBankReverse)
+    showWords(constants.kitchenBank)
 
     // listen to button click event
     document.getElementById("buttons").addEventListener("click", function (event) {
         
         if(event.target.id != 'buttons'){
-            startMatch(event)
+            startMatch(constants.kitchenBank)
         }
         
     })
@@ -69,42 +67,41 @@ function init() {
 }
 
 function showWords(dict) {
+    /** Regular Mapping */
 
-    // put all key and values of bank in two separate list
-    const keys = Object.keys(dict)
+    // english words
+    const keysEnglishWords = Object.keys(dict)
 
-    const values = Object.keys(dict).map(key => {
+    // spanish words
+    const valuesSpanishWords = Object.keys(dict).map(key => {
 
         return dict[key]
     })
 
     // Generate random index
-    var randIndex = Math.floor(Math.random() * keys.length)
-
+    var randDictIndex = Math.floor(Math.random() * keysEnglishWords.length)
 
     // Check if question was asked last time, bascially,
     // I want to make sure same question is not being
     // asked twice
     // === is strict comparison
-    while (prevQuestion === keys[randIndex]) {
-        randIndex = Math.floor(Math.random() * keys.length)
+    while (prevQuestion === keysEnglishWords[randDictIndex]) {
+        randDictIndex = Math.floor(Math.random() * keysEnglishWords.length)
     }
-    prevQuestion = keys[randIndex]
-    var questionAsked = keys[randIndex]
+    prevQuestion = keysEnglishWords[randDictIndex]
+    var questionAsked = keysEnglishWords[randDictIndex]
 
-
-
-    var answerIndex = randIndex // answer to our question
+    var answerIndex = randDictIndex // answer to our question
 
     // create list of choice and add answer
     var choices = []
-    choices.push(values[answerIndex])
+    choices.push(valuesSpanishWords[answerIndex])
 
     // Add two more options
     while (choices.length != 3) {
-        randIndex = Math.floor(Math.random() * keys.length)
-        if (!choices.includes(values[randIndex])) {
-            choices.push(values[randIndex])
+        randDictIndex = Math.floor(Math.random() * keysEnglishWords.length)
+        if (!choices.includes(valuesSpanishWords[randDictIndex])) {
+            choices.push(valuesSpanishWords[randDictIndex])
         }
     }
 
@@ -119,14 +116,18 @@ function showWords(dict) {
     buttonsElement.map((button, index) => {
         return button.innerHTML = choices[index]
     })
+
+
+
+    /** Regular Mapping Stop */
 }
 
 // Start match
-function startMatch() {
+function startMatch(dict) {
 
     if (matchWords()) {
         isPlaying = true
-        showWords(kitchenBankReverse)
+        showWords(dict)
         time = currentLevel + 1
 
 
@@ -151,13 +152,25 @@ function startMatch() {
 
 var wrongAnswerClicked = false
 
+function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+  }
+
 function matchWords() {
 
-    var value = event.target.innerHTML
-    if (value == null) {
+    // english words are keys
+    // spanish words are values
+
+    var choiceValue = event.target.innerHTML
+    
+    var choiceKey = getKeyByValue(constants.kitchenBank, choiceValue)   
+    
+
+
+    if (choiceValue == null) {
         message.innerHTML = 'Please choose a translation'
 
-    } else if (constants.kitchenBank[value] === currentWord.innerHTML) {
+    } else if (choiceKey === currentWord.innerHTML) {
 
         message.innerHTML = 'Correct😁'
 

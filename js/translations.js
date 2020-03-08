@@ -49,4 +49,6 @@ const feelingsBank = {'I\'m happy': 'Estoy feliz', 'I\'m in love': 'Estoy enamor
                     'I\'m content': 'Estoy contento', 'I\'m busy': 'Estoy ocupado', 'I\'m worried': 'Estoy preocupado',
                     'I\'m furious': 'Estoy furioso', 'I\'m sad': 'Estoy triste', 'I\'m embarrssed': 'Estoy avergonzado'}
 
-export {kitchenBank, snackLunchBank, lunchBank, breakfastBank, weatherBank, feelingsBank}
+
+const listDictionaries =  [kitchenBank, snackLunchBank, lunchBank, breakfastBank, weatherBank, feelingsBank];
+export {listDictionaries}

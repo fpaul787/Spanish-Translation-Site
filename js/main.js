@@ -3,8 +3,8 @@
 // to the target.
 window.addEventListener('load', init)
 
-import * as constants from './translations.js'
-import { shuffle, reverseMapping } from './utility.js'
+import { listDictionaries } from './translations.js'
+import { shuffle } from './utility.js'
 
 
 // Globals
@@ -38,29 +38,34 @@ let correctInRow = 0 // amount corrent in row
 let buttonsElement = Array.prototype.slice.call(buttons)
 let wrongButton
 
-// reverse bank so that spanish words are keys, and english
-// words are values
-let kitchenBankReverse = reverseMapping(constants.kitchenBank)
+// get random index to get a dictionary from our list 
+var randomDictionaryIndex 
 
-
+// dictionary for entire game
+var gameDictionary
 function init() {
 
     
+    // generate random index, assign it to variable
+    randomDictionaryIndex = Math.round(Math.random() * listDictionaries.length)
+    gameDictionary = listDictionaries[randomDictionaryIndex]
+
     // Load word from array
-    showWords(constants.kitchenBank)
+    showWords(gameDictionary)
 
     // listen to button click event
     document.getElementById("buttons").addEventListener("click", function (event) {
-        
-        if(event.target.id != 'buttons'){
-            startMatch(constants.kitchenBank)
+
+        // I want the individual button elements,
+        // not the div. Which is why I'm doing this
+        if (event.target.id != 'buttons') {
+            startMatch(gameDictionary)
         }
-        
+
     })
 
     // Call countdown on every second
     setInterval(countDown, 1000)
-
 
     // Check game status
     setInterval(checkStatus, 50)
@@ -153,8 +158,8 @@ function startMatch(dict) {
 var wrongAnswerClicked = false
 
 function getKeyByValue(object, value) {
-    return Object.keys(object).find(key => object[key] === value);
-  }
+    return Object.keys(object).find(key => object[key] === value)
+}
 
 function matchWords() {
 
@@ -162,10 +167,8 @@ function matchWords() {
     // spanish words are values
 
     var choiceValue = event.target.innerHTML
-    
-    var choiceKey = getKeyByValue(constants.kitchenBank, choiceValue)   
-    
 
+    var choiceKey = getKeyByValue(gameDictionary, choiceValue)
 
     if (choiceValue == null) {
         message.innerHTML = 'Please choose a translation'
@@ -174,17 +177,17 @@ function matchWords() {
 
         message.innerHTML = 'Correct😁'
 
-        if(wrongAnswerClicked){
+        if (wrongAnswerClicked) {
             wrongButton.className = 'button'
         }
-        
+
         return true
     } else {
         message.innerHTML = 'Not Correct😑'
         wrongButton = event.target
-        event.target.className = "buttonWrongChoice"        
-        wrongAnswerClicked = true    
-        return false    
+        event.target.className = "buttonWrongChoice"
+        wrongAnswerClicked = true
+        return false
     }
 
 }
@@ -213,19 +216,3 @@ function checkStatus() {
         score = -1
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

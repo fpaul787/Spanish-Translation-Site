@@ -43,6 +43,7 @@ var randomDictionaryIndex
 
 // dictionary for entire game
 var gameDictionary
+
 function init() {
 
     
@@ -122,9 +123,6 @@ function showWords(dict) {
         return button.innerHTML = choices[index]
     })
 
-
-
-    /** Regular Mapping Stop */
 }
 
 // Start match
@@ -135,17 +133,22 @@ function startMatch(dict) {
         showWords(dict)
         time = currentLevel + 1
 
-
         score++ // increment score
         correctInRow++ // increment correct in row
 
         if (correctInRow == maxCorrectInRow && currentLevel != lowestTime) {
 
+            if(correctInRow == maxCorrectInRow){
+                console.log("Hi")
+                message.innerHTML = 'Wow, you are really good 😎'
+            }else if(correctInRow == maxCorrectInRow * 2){
+                message.innerHTML = "Ok, this isn't fair 😲"
+            }else if(correctInRow == maxCorrectInRow * 3){
+                message.innerHTML = "Alright, we're going to start over 😜"
+                score = 0
+            }
             currentLevel = currentLevel - 5 // change level
-            time = currentLevel + 1 // change time
-            correctInRow = 0 // reset correct in row
-            maxCorrectInRow = maxCorrectInRow + 5 // create new max 
-
+            time = currentLevel + 1 // change time       
         }
     } else {
         score = 0

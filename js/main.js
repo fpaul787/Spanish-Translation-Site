@@ -72,7 +72,7 @@ function init() {
 }
 
 function showWords(dict) {
-    /** Regular Mapping */
+    
 
     // english words
     const keysEnglishWords = Object.keys(dict)

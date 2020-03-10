@@ -36,7 +36,7 @@ let correctInRow = 0 // amount corrent in row
 
 // convert buttons to an array
 let buttonsElement = Array.prototype.slice.call(buttons)
-let wrongButton
+let wrongButtons = []
 
 // get random index to get a dictionary from our list 
 var randomDictionaryIndex 
@@ -136,19 +136,23 @@ function startMatch(dict) {
         score++ // increment score
         correctInRow++ // increment correct in row
 
-        if (correctInRow == maxCorrectInRow && currentLevel != lowestTime) {
+        if (correctInRow >= maxCorrectInRow ) {
 
             if(correctInRow == maxCorrectInRow){
                 console.log("Hi")
-                message.innerHTML = 'Wow, you are really good 😎'
+                message.innerHTML += '  Wow, you are really good 😎 '
             }else if(correctInRow == maxCorrectInRow * 2){
-                message.innerHTML = "Ok, this isn't fair 😲"
+                message.innerHTML += "  Ok, this isn't fair 😲"
             }else if(correctInRow == maxCorrectInRow * 3){
-                message.innerHTML = "Alright, we're going to start over 😜"
+                message.innerHTML += "Alright, we're going to start over 😜"
                 score = 0
             }
-            currentLevel = currentLevel - 5 // change level
-            time = currentLevel + 1 // change time       
+
+            if( currentLevel != lowestTime){
+                currentLevel = currentLevel - 5 // change level
+            time = currentLevel + 1 // change time
+            }
+                   
         }
     } else {
         score = 0
@@ -181,13 +185,16 @@ function matchWords() {
         message.innerHTML = 'Correct😁'
 
         if (wrongAnswerClicked) {
-            wrongButton.className = 'button'
+            wrongButtons.map(val =>{
+                val.className = 'button'
+            })
+            
         }
 
         return true
     } else {
         message.innerHTML = 'Not Correct😑'
-        wrongButton = event.target
+        wrongButtons.push(event.target)
         event.target.className = "buttonWrongChoice"
         wrongAnswerClicked = true
         return false

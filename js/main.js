@@ -9,26 +9,25 @@ import { shuffle } from './utility.js'
 
 // Globals
 
-// difficulty levels of time
-const levels = {
-    easy: 15,
-    medium: 10,
-    hard: 5
-}
-
 // Get elements and add event listeners
 const currentWord = document.querySelector('#current-word')
 const buttons = document.querySelector('#buttons').children
 const timeDisplay = document.querySelector('#time')
 const message = document.querySelector('#message')
+const specialMessage = document.querySelector('#specialMessage')
 const scoreDisplay = document.querySelector('#score')
-const lowestTime = 5
+
+// difficulty levels of time
+const levels = {
+    easy: 10,
+    medium: 7,
+    hard: 5
+}
 
 // Variables
 let currentLevel = levels.easy // current difficult level
-let time = currentLevel // time in current game
-let maxCorrectInRow = 5
-
+let time = levels.easy + 1 // time in current game
+let maxCorrectInRow = 3
 let isPlaying
 let prevQuestion = ''
 let score = 0   //score in game
@@ -39,17 +38,16 @@ let buttonsElement = Array.prototype.slice.call(buttons)
 let wrongButtons = []
 
 // get random index to get a dictionary from our list 
-var randomDictionaryIndex 
+var randomDictionaryIndex
 
 // dictionary for entire game
-var gameDictionary
+// generate random index, assign it to variable
+// randomDictionaryIndex = Math.round(Math.random() * listDictionaries.length)
+const gameDictionary = listDictionaries[0]
+
 
 function init() {
 
-    
-    // generate random index, assign it to variable
-    randomDictionaryIndex = Math.round(Math.random() * listDictionaries.length)
-    gameDictionary = listDictionaries[randomDictionaryIndex]
 
     // Load word from array
     showWords(gameDictionary)
@@ -65,15 +63,52 @@ function init() {
 
     })
 
+    // Gonna make this optional?
     // Call countdown on every second
     setInterval(countDown, 1000)
 
-    // Check game status
+    // Check game status 50 millisecond or .05 second
     setInterval(checkStatus, 50)
 }
 
+
+
+// Start match
+// begins match 
+// decreases time if
+// user gets maxCorrectInRow * 2
+// ...d 
+function startMatch(dict) {
+
+    // if word shown and word clicked match
+    if (matchWords()) {
+        isPlaying = true
+        showWords(dict)
+        time = currentLevel + 1 // starts time at extra second
+
+        score++ // increment score
+        correctInRow++ // increment correct in row
+
+        
+        if (correctInRow == maxCorrectInRow) {
+            message.innerHTML += '  Wow, you are really good 😎 '
+        } else if (correctInRow == maxCorrectInRow * 2) {
+            message.innerHTML += "  Ok, this isn't fair 😲"  
+            currentLevel = levels.medium   // change level (nu)
+        } else if (correctInRow == maxCorrectInRow * 3) {
+            currentLevel = levels.hard
+            message.innerHTML += "  Nice! 😜"    
+        } 
+    } else { // if user clicks on wrong translation
+        score = 0
+        correctInRow = 0 // reset correct in row
+        currentLevel = levels.easy
+    }
+    scoreDisplay.innerHTML = score
+}
+
 function showWords(dict) {
-    
+
 
     // english words
     const keysEnglishWords = Object.keys(dict)
@@ -125,43 +160,6 @@ function showWords(dict) {
 
 }
 
-// Start match
-function startMatch(dict) {
-
-    if (matchWords()) {
-        isPlaying = true
-        showWords(dict)
-        time = currentLevel + 1
-
-        score++ // increment score
-        correctInRow++ // increment correct in row
-
-        if (correctInRow >= maxCorrectInRow ) {
-
-            if(correctInRow == maxCorrectInRow){
-                console.log("Hi")
-                message.innerHTML += '  Wow, you are really good 😎 '
-            }else if(correctInRow == maxCorrectInRow * 2){
-                message.innerHTML += "  Ok, this isn't fair 😲"
-            }else if(correctInRow == maxCorrectInRow * 3){
-                message.innerHTML += "Alright, we're going to start over 😜"
-                score = 0
-            }
-
-            if( currentLevel != lowestTime){
-                currentLevel = currentLevel - 5 // change level
-            time = currentLevel + 1 // change time
-            }
-                   
-        }
-    } else {
-        score = 0
-        correctInRow = 0 // reset correct in row
-    }
-    scoreDisplay.innerHTML = score
-
-}
-
 var wrongAnswerClicked = false
 
 function getKeyByValue(object, value) {
@@ -173,8 +171,10 @@ function matchWords() {
     // english words are keys
     // spanish words are values
 
+    // choice that user clicks on
     var choiceValue = event.target.innerHTML
 
+    // getting key of that choice(value)
     var choiceKey = getKeyByValue(gameDictionary, choiceValue)
 
     if (choiceValue == null) {
@@ -182,13 +182,14 @@ function matchWords() {
 
     } else if (choiceKey === currentWord.innerHTML) {
 
+        
         message.innerHTML = 'Correct😁'
 
         if (wrongAnswerClicked) {
-            wrongButtons.map(val =>{
+            wrongButtons.map(val => {
                 val.className = 'button'
             })
-            
+
         }
 
         return true
@@ -202,7 +203,6 @@ function matchWords() {
 
 }
 
-
 // Countdown timer
 function countDown() {
 
@@ -213,7 +213,12 @@ function countDown() {
     } else if (time === 0) {
         // Game is over
         isPlaying = false
+
+        // reset values
         time = 0
+        score = 0
+        currentLevel = levels.easy 
+        correctInRow = 0
     }
     // Show time
     timeDisplay.innerHTML = time
@@ -223,6 +228,5 @@ function countDown() {
 function checkStatus() {
     if (!isPlaying && time === 0) {
         message.innerHTML = 'Game Over!'
-        score = -1
     }
 }

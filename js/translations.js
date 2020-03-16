@@ -39,9 +39,9 @@ const weatherBank = {'It is hot': 'Hace calor', 'It is cold': 'Have frio', 'It i
                 'It is cloudy': 'Está nublado', 'It is sunny': 'Está soleado', 
                 'It is clear': 'Está despejado', 'It is windy': 'Está ventoso', 
                 'It is stormy': 'Está tormentoso', 'It is raining': 'Está lloviendo', 
-                'It is snowing': 'Está nevando', 'It\'s windy': 'Hay viento', 'It is foggy': 'Hay niebla',
-                'It\'s raining pitchers/buckets': '¡Llueve a cántaros!',
-                'It\'s raining oceans!': '¡Llueve a mares!', 'I\'m freezing!': '¡Me estoy congelando',}
+                'It is snowing': 'Está nevando', "It's windy": 'Hay viento', 'It is foggy': 'Hay niebla',
+                "It's raining pitchers/buckets": '¡Llueve a cántaros!',
+                "It's raining oceans!": "¡Llueve a mares!", "I'm freezing!": '¡Me estoy congelando',}
 
 const feelingsBank = {'I\'m happy': 'Estoy feliz', 'I\'m in love': 'Estoy enamorado', 'I\'m tired': 'Estoy cansado',
                     'I\'m excited': 'Estoy emocionado', 'I\'m frightenned': 'Estoy asustado',
@@ -50,5 +50,7 @@ const feelingsBank = {'I\'m happy': 'Estoy feliz', 'I\'m in love': 'Estoy enamor
                     'I\'m furious': 'Estoy furioso', 'I\'m sad': 'Estoy triste', 'I\'m embarrssed': 'Estoy avergonzado'}
 
 
-const listDictionaries =  [kitchenBank, snackLunchBank, lunchBank, breakfastBank, weatherBank, feelingsBank];
+
+const testBank = {'Breakfast': 'Desayuno', 'Bread': 'Pan', 'Butter': 'Mantequilla'}
+const listDictionaries =  [testBank, kitchenBank, snackLunchBank, lunchBank, breakfastBank, weatherBank, feelingsBank];
 export {listDictionaries}

@@ -19,6 +19,29 @@
 	color: white;
 }
 
+button:disabled,
+button[disabled] {
+	border: 1px solid #999999;
+	background-color: #cccccc;
+	color: #666666;
+}
+
+.startOverButton {
+	background: rgb(29, 144, 221); /*Color of inside button unhover*/
+	color: white; /* Color of button text */
+	border: 2px solid #af4c86; /* Green */
+	padding: 15px 32px; /* Spacing inside button*/
+	margin: 4px 2px; /*Spacing outside button */
+	text-align: center; /* Text is centered in button */
+	text-decoration: none; /*No decoration to text */
+	display: inline-block; /* Display element inline-level */
+	font-size: 16px;
+	cursor: pointer;
+	border-radius: 8px;
+
+	width: 50%;
+}
+
 .buttonWrongChoice {
 	background: red; /*Color of inside button unhover*/
 	color: white; /* Color of button text */
